@@ -76,20 +76,22 @@ def buy():
     """Buy shares of stock"""
     if request.method == "POST":
         if not request.form.get("symbol"):
-            return apology("must provide symbol", 403)
+            return apology("must provide symbol", 400)
 
         symbol = request.form.get("symbol")
 
         if not request.form.get("shares"):
-            return apology("must provide shares", 403)
+            return apology("must provide shares", 400)
 
         shares = request.form.get("shares")
         shares = int(shares)
         if shares < 1:
-            return apology("shares must be positive integrer", 403)
+            return apology("shares must be positive integrer", 400)
 
 
         quote = lookup(symbol)
+        if not quote:
+            return apology("quote not found", 400)
         userCash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"]);
 
         """If user can´t afford ir return message"""
@@ -186,9 +188,12 @@ def quote():
     """Get stock quote."""
     if request.method == "POST":
         if not request.form.get("symbol"):
-            return apology("must symbol", 403)
+            return apology("must symbol", 400)
 
         quote = lookup(request.form.get("symbol"))
+
+        if not quote:
+            return apology("quote not found", 400)
         quote["price"] = usd(quote["price"])
         return render_template("quoted.html", quote=quote)
     else:
@@ -201,15 +206,15 @@ def register():
     if request.method == "POST":
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return apology("must provide username", 400)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return apology("must provide password", 400)
 
         # Ensure password was submitted
         elif not request.form.get("confirmation"):
-            return apology("must provide confirmation", 403)
+            return apology("must provide confirmation", 400)
 
         # Ensure password was submitted
         elif request.form.get("password") != request.form.get("confirmation"):
@@ -233,17 +238,18 @@ def sell():
     """Sell shares of stock"""
     if request.method == "POST":
         if not request.form.get("symbol"):
-            return apology("must provide symbol", 403)
+            return apology("must provide symbol", 400)
 
         symbol = request.form.get("symbol")
 
         if not request.form.get("shares"):
-            return apology("must provide shares", 403)
+            return apology("must provide shares", 400)
 
         shares = request.form.get("shares")
         shares = int(shares)
+
         if shares < 1:
-            return apology("shares must be positive integrer", 403)
+            return apology("shares must be positive integrer", 400)
 
         #get user current stocks
         user = session["user_id"]
