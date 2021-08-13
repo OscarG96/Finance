@@ -276,9 +276,17 @@ def sell():
 
 
         quote = lookup(symbol)
-        print("symbol" ,symbol)
-        print("quote" ,quote)
+        #print("symbol" ,symbol)
+        #print("quote" ,quote)
         price = quote["price"]
+
+        #check amount of stocks user can sell
+        user_stock = db.execute("SELECT *, SUM(shares_amount) AS shares_sum FROM purchases WHERE user_id = ? WHERE stock = ? GROUP BY stock;", user, symbol)[0]
+
+        if user_stock["shares_amount"] < shares:
+            return apology("Cannot sale more shares than owned", 400)
+
+
 
         #register transaction
         db.execute("INSERT INTO transactions (user_id, stock, price, created_at, shares_amount, type) VALUES (?, ?, ? , ?, ?, ?)", user, symbol, price, datetime.datetime.now(), shares, "sale")
