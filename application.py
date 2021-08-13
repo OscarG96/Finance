@@ -101,7 +101,7 @@ def buy():
         cash = userCash[0]["cash"]
 
         if totalPurchase > cash:
-            return apology("insufficient cash :(", 403)
+            return apology("insufficient cash :(", 400)
 
         #query to see if stock already exists
         exists = db.execute("SELECT * FROM purchases WHERE stock = ?", symbol)
@@ -147,18 +147,18 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return apology("must provide username", 400)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return apology("must provide password", 400)
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return apology("invalid username and/or password", 400)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -218,7 +218,7 @@ def register():
 
         # Ensure password was submitted
         elif request.form.get("password") != request.form.get("confirmation"):
-            return apology("Password and confirmation must be equal", 403)
+            return apology("Password and confirmation must be equal", 400)
 
         username = request.form.get("username")
         hashed = generate_password_hash(request.form.get("password"))
@@ -289,7 +289,7 @@ def sell():
 def addCash():
     if request.method == "POST":
         if not request.form.get("cash"):
-            return apology("must provide cash", 403)
+            return apology("must provide cash", 400)
 
         user = session["user_id"]
         cash_to_add = request.form.get("cash")
