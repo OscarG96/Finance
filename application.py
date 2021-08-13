@@ -84,6 +84,10 @@ def buy():
             return apology("must provide shares", 400)
 
         shares = request.form.get("shares")
+
+        if shares.isnumeric() == False or (shares).is_integer() == False:
+            return apology("shares type must be digit", 400)
+
         shares = int(shares)
         if shares < 1:
             return apology("shares must be positive integrer", 400)
@@ -222,6 +226,10 @@ def register():
 
         username = request.form.get("username")
         hashed = generate_password_hash(request.form.get("password"))
+
+        user_exists = db.execute("SELECT username FROM users WHERE username = ?", username)
+        if len(user_exists) > 0:
+            return apology("user already exists, please login", 400)
 
         db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, hashed)
 
