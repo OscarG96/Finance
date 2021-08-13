@@ -281,7 +281,9 @@ def sell():
         price = quote["price"]
 
         #check amount of stocks user can sell
-        user_stock = db.execute("SELECT *, SUM(shares_amount) AS shares_sum FROM purchases WHERE user_id = ? WHERE stock = ? GROUP BY stock;", user, symbol)[0]
+        user_stock = db.execute("SELECT *, SUM(shares_amount) AS shares_sum FROM purchases WHERE user_id = ? AND stock = ? GROUP BY stock;", user, symbol)[0]
+
+        print("user_stock", user_stock)
 
         if user_stock["shares_amount"] < shares:
             return apology("Cannot sale more shares than owned", 400)
