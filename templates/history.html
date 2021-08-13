@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <h2>My stonks</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Shares</th>
+                <th>Date</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- TODO: Loop through data to display them in this table -->
+            {% for stock in transactions %}
+                <tr>
+                    <td>{{stock.stock}}</td>
+                    <td>{{stock.price | usd}}</td>
+                    <td>{{stock.shares_amount}}</td>
+                    <td>{{stock.created_at}}</td>
+                    <td>{{stock.type}}</td>
+                </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+{% endblock %}

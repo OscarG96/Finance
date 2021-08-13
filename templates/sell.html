@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <form action="/sell" method="post">
+        <div class="form-group">
+            <label for="userStocks">Current stocks</label>
+            <select name="symbol" class="form-control" id="userStocks">
+                <option selected disabled>-- Select --</option>
+                {% for instance in user_stocks %}
+                    <option value="{{instance.stock}}">{{instance.stock}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <input id="sharesNumber" autocomplete="off" autofocus class="form-control"  placeholder="Shares" name="shares" min="0" type="number">
+        </div>
+        <button class="btn btn-primary" type="submit">Sell</button>
+    </form>
+{% endblock %}
