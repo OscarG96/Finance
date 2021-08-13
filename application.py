@@ -84,11 +84,15 @@ def buy():
             return apology("must provide shares", 400)
 
         shares = request.form.get("shares")
+        print("type of shares" ,type(shares))
 
-        if shares.isnumeric() == False or (shares).is_integer() == False:
-            return apology("shares type must be digit", 400)
+        #if shares.isdigit() == False or type(shares) !== int:
+         #   return apology("shares type must be digit", 400)
+        if shares.isnumeric() == False:
+            return apology("shares must be positive integrer", 400)
 
         shares = int(shares)
+
         if shares < 1:
             return apology("shares must be positive integrer", 400)
 
@@ -96,6 +100,7 @@ def buy():
         quote = lookup(symbol)
         if not quote:
             return apology("quote not found", 400)
+
         userCash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"]);
 
         """If user can´t afford ir return message"""
